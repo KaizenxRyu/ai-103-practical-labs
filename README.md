@@ -8,15 +8,7 @@ This is an independent study repository, not an official Microsoft course. The f
 
 ## How we learn
 
-```mermaid
-flowchart LR
-    A[Understand the concept] --> B[Choose a design]
-    B --> C[Build a small lab]
-    C --> D[Test normal and failure cases]
-    D --> E[Explain the result in your own words]
-    E --> F[Record evidence and lessons]
-    F --> G[Draft a LinkedIn explanation for review]
-```
+![Practical learning loop illustrated with Microsoft architecture icons](assets/learning-loop.png)
 
 Each lesson has a scenario, acceptance criteria, a short practical task and a teach-back question. A teacher demonstration is recorded separately from work the learner completes.
 
@@ -24,16 +16,7 @@ Each lesson has a scenario, acceptance criteria, a short practical task and a te
 
 We will build a support assistant using invented product documents. It should cite its sources, say when evidence is missing, and obtain permission before changing a ticket.
 
-```mermaid
-flowchart LR
-    U[User question] --> A[Assistant]
-    D[Synthetic product documents] --> R[Retrieval]
-    R --> A
-    A --> T[Read-only ticket lookup]
-    A --> V[Answer with citations]
-    A --> P[Approval for ticket changes]
-    P --> W[Bounded write tool]
-```
+![Proposed support assistant with Microsoft Foundry, Azure AI Search, tools and operator approval](assets/support-assistant.png)
 
 This is the target architecture, not a claim of running integration.
 
@@ -69,7 +52,24 @@ Answer these three questions in your own words:
 
 Acceptance: distinguish model behavior, current knowledge and external actions; justify the design; explain a failure path. A generated tool request is not permission to act. These are original teaching questions, not recalled exam questions.
 
-The fuller lesson and learner log are in the local workspace. They will be published alongside reviewed lab implementations.
+### Worked example: a changing support policy
+
+![Changing a support policy without retraining model weights](assets/lesson-01-rag.png)
+
+Alpine Desk's invented P1 response target changes from **8 hours** in policy v1 to **2 hours** in policy v2. A user asks, "What is our P1 response target?"
+
+The application retrieves the current policy passage and includes it with the question and instructions to cite its source. The illustrated answer is **"2 hours [policy-v2]"**. This is a worked teaching example, not output from a deployed model.
+
+- **Prompt:** instructions such as "use supplied evidence and cite it." A tiny document can also be included directly if context fits.
+- **Retrieval:** finds the relevant current passage. For frequently changing documents, RAG is a practical first choice; refresh the index when sources change.
+- **Fine-tuning:** changes learned behavior or style. It is not the first choice for keeping weekly policy facts current.
+- **Tool:** fetches a ticket's live status or performs an authorized operation. Documents are not a substitute for the live ticket API.
+
+If retrieval misses policy v2, the answer can still be stale. If no reliable evidence exists, report uncertainty. If the ticket API times out, do not invent a current status. Validate identity and authorization before a ticket write, request operator approval, and prevent duplicate actions.
+
+Try it manually: give a model your question alone, then supply only policy v2 as evidence with a citation instruction. Compare answers and record whether the citation supports the claim. Do not mark this lab completed until you have run and explained the comparison yourself.
+
+The learner log remains local. See [icon sources and editable diagrams](assets/README.md).
 
 ## Repository layout
 
@@ -100,5 +100,6 @@ Checked 13 October 2026:
 - [Credential and official practice assessment](https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-apps-and-agents-developer-associate/)
 - [Foundry retrieval grounding](https://learn.microsoft.com/en-us/azure/foundry/concepts/retrieval-augmented-generation)
 - [Foundry agents overview](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)
+- [Official Microsoft Azure architecture icons](https://learn.microsoft.com/en-us/azure/architecture/icons/)
 
 Use original scenarios and public synthetic data. No exam dumps or copied assessment questions.
